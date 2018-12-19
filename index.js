@@ -21,12 +21,16 @@ let server = http.createServer(function(req, res){
 	// Get the HTTP method
 	let method = req.method.toLowerCase();
 
+	// Get the headers as an object
+	let headers = req.headers;
+
 	// Send the response
 	res.end('Hello world!\n');
 
 	// Log the request path
 	console.log('Request received on path: '+trimmedPath+' with method: '+method);
 	console.log('Query string parameters: ', queryStringObject);
+	console.log('Headers: ', headers);
 
 });
 
