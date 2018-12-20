@@ -5,6 +5,7 @@
 // Dependency
 const http = require('http');
 const url = require('url');
+const StringDecoder = require('string_decoder').StringDecoder;
 
 // Ther server should respond to all requests with a string
 let server = http.createServer(function(req, res){
@@ -24,13 +25,26 @@ let server = http.createServer(function(req, res){
 	// Get the headers as an object
 	let headers = req.headers;
 
-	// Send the response
-	res.end('Hello world!\n');
+	// Get the payload, if any
+	let decoder = new StringDecoder('utf-8');
+	let buffer = '';
+	req.on('data', function(data){
+		buffer += decoder.write(data);
+	});
 
-	// Log the request path
-	console.log('Request received on path: '+trimmedPath+' with method: '+method);
-	console.log('Query string parameters: ', queryStringObject);
-	console.log('Headers: ', headers);
+	//This event gets triggered even if there is no payload
+	req.on('end', function(){
+		buffer += decoder.end();
+
+		// Send the response
+		res.end('Hello world!\n');
+
+		// Log the parsed information
+		console.log('Request received on path: '+trimmedPath+' with method: '+method);
+		console.log('Query string parameters: ', queryStringObject);
+		console.log('Headers: ', headers);
+		console.log('Payload received: ', buffer);
+	});
 
 });
 
