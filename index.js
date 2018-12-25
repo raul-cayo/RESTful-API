@@ -103,11 +103,9 @@ var unifiedSever = function(req, res){
 // Define the handlers
 let handlers = {}
 
-handlers.sample = function(data, callback){
-
-	// Callback http status code, and a payload object
-	callback(406, {'name' : 'sample handler'});
-};
+handlers.ping = function(data, callback){
+	callback(200);
+}
 
 handlers.notFound = function(data, callback){
 	callback(404);
@@ -115,5 +113,5 @@ handlers.notFound = function(data, callback){
 
 // Define a request router
 let router = {
-	'sample' : handlers.sample
+	'ping' : handlers.ping
 }
