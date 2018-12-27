@@ -17,7 +17,7 @@ let httpServer = http.createServer(function(req, res){
 
 // Start the HTTP server
 httpServer.listen(config.httpPort, function(){
-	console.log('The server is listening on port '+config.httpPort+' in '+config.envName+' mode.');
+	console.log('The HTTP server is listening on port '+config.httpPort+' in '+config.envName+' mode.');
 });
 
 // Instatiate the HTTPS server
@@ -31,11 +31,11 @@ let httpsServer = https.createServer(httpsServerOptions, function(req, res){
 
 // Start the HTTPS Server
 httpsServer.listen(config.httpsPort, function(){
-	console.log('The server is listening on port '+config.httpsPort+' in '+config.envName+' mode.');
+	console.log('The HTTPS server is listening on port '+config.httpsPort+' in '+config.envName+' mode.');
 });
 
 // All the server logic for both the http and https server
-var unifiedSever = function(req, res){
+let unifiedSever = function(req, res){
 	// Get the URL and parse it
 	let parsedURL = url.parse(req.url, true);
 
@@ -93,19 +93,21 @@ var unifiedSever = function(req, res){
 
 			// Log the parsed information
 			console.log('Request received on path: '+trimmedPath+' with method: '+method);
-			console.log('Query string parameters: ', queryStringObject);
-			console.log('Headers: ', headers);
-			console.log('Returning this response: ', statusCode, payloadString);
+				//console.log('Query string parameters: ', queryStringObject);
+				//console.log('Headers: ', headers);
+				//console.log('Returning this response: ', statusCode, payloadString);
+				//console.log('User paylaod: ', data.payload);
 		});
 	});
 };
 
 // Define the handlers
-let handlers = {}
+let handlers = {};
 
 handlers.ping = function(data, callback){
+	// The second parameter is the payload as object
 	callback(200);
-}
+};
 
 handlers.notFound = function(data, callback){
 	callback(404);
@@ -114,4 +116,4 @@ handlers.notFound = function(data, callback){
 // Define a request router
 let router = {
 	'ping' : handlers.ping
-}
+};
