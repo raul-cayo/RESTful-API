@@ -2,13 +2,16 @@
 // Primary file for the API
 // ---------------------------
 
-// Dependency
+// Dependencies
 const http = require('http');
 const https = require('https');
 const url = require('url');
 const StringDecoder = require('string_decoder').StringDecoder;
-const config = require('./config');
 const fs = require('fs');
+
+const config = require('./lib/config');
+const handlers = require('./lib/handlers');
+const helpers = require('./lib/helpers');
 
 // Instatiate the HTTP server
 let httpServer = http.createServer(function(req, res){
@@ -72,7 +75,7 @@ let unifiedSever = function(req, res){
 			'queryStringObject' : queryStringObject,
 			'method' : method,
 			'headers' : headers,
-			'payload' : buffer
+			'payload' : helpers.parseJsonToObject(buffer)
 		}
 
 		// Route the request to the handler specified in the router
@@ -101,19 +104,8 @@ let unifiedSever = function(req, res){
 	});
 };
 
-// Define the handlers
-let handlers = {};
-
-handlers.ping = function(data, callback){
-	// The second parameter is the payload as object
-	callback(200);
-};
-
-handlers.notFound = function(data, callback){
-	callback(404);
-};
-
 // Define a request router
 let router = {
-	'ping' : handlers.ping
+	'ping' : handlers.ping,
+	'users' : handlers.users
 };
